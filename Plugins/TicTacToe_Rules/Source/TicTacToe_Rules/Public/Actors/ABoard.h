@@ -22,14 +22,14 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-	UPROPERTY()
-	UAComp_BoardInfo* boardInfo;
-
 	TArray<AATile_Base*> Tiles;
 
 	// тип тайлов, которые будут генерироваться на поле во время инициализации
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
 	TSubclassOf<AATile_Base> TilesType;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	UAComp_BoardInfo* boardInfo;
 
 public:	
 	// Called every frame
