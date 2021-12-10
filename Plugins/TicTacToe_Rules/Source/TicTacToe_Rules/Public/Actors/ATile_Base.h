@@ -25,26 +25,29 @@ protected:
 	void OnClick(UPrimitiveComponent* ClickedActor, FKey ButtonPressed);
 
 	UPROPERTY()
-	int32 TileNumber;
+	int32 TileNumber = -1;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	USceneComponent* Root;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	UStaticMeshComponent* SMesh;
+	
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
 	FOnTileClicked OnTileClicked;
-
-	UFUNCTION()
-	void Event_Click();
 	
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
-	UStaticMeshComponent* Mesh;
+	UFUNCTION(BlueprintNativeEvent)
+	void Event_Click();
 
 	UFUNCTION(BlueprintCallable)
 	void SetTileNumber(const int32 Number);
 
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, BlueprintPure)
 	int32 GetTileNumber();
 
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, BlueprintPure)
 	FVector GetBounds();
 };
