@@ -21,9 +21,8 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-	//TODO: пофиксить баг компил€ции при использовании структуры FKey
-	/*UFUNCTION(BlueprintNativeEvent)
-	void OnClick(UPrimitiveComponent* ClickedActor, FKey ButtonPressed);*/
+	UFUNCTION(BlueprintNativeEvent)
+	void OnClick(UPrimitiveComponent* ClickedActor, FKey ButtonPressed);
 
 	UPROPERTY()
 	int32 TileNumber;

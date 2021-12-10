@@ -9,8 +9,7 @@ AATile_Base::AATile_Base()
 	PrimaryActorTick.bCanEverTick = true;
 
 	Mesh->CreateDefaultSubobject<UStaticMeshComponent>("Mesh");
-	// TODO: когда будет пофикшен баг со структурой FKey - включить эту функцию (нужна для реакции на клик мышки)
-	//Mesh->OnClicked.AddDynamic(this, &AATile_Base::OnClick);
+	Mesh->OnClicked.AddDynamic(this, &AATile_Base::OnClick);
 }
 
 // Called when the game starts or when spawned
@@ -20,10 +19,10 @@ void AATile_Base::BeginPlay()
 	
 }
 
-/*void AATile_Base::OnClick_Implementation(UPrimitiveComponent* ClickedActor, FKey ButtonPressed)
+void AATile_Base::OnClick_Implementation(UPrimitiveComponent* ClickedActor, FKey ButtonPressed)
 {
 	Event_Click();
-}*/
+}
 
 // Called every frame
 void AATile_Base::Tick(float DeltaTime)
