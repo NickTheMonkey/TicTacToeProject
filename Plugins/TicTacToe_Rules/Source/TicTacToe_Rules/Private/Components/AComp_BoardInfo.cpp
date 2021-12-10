@@ -238,10 +238,10 @@ bool UAComp_BoardInfo::Initialization_Implementation(int32 l_Width, int32 l_Heig
 
 	
 	// инициализация числа, указывающего на необходимое кол-во символов, которое нужно выстроить в ряд, для победы
-	if((l_SymbolsInLineToWin < l_Width) && (l_SymbolsInLineToWin < l_Height)) // если невозможно впихнуть заданную победную линию в созданное поле
+	if((l_SymbolsInLineToWin > l_Width) && (l_SymbolsInLineToWin > l_Height)) // если невозможно впихнуть заданную победную линию в созданное поле
 	{
 		SymbolsInLineForWin = (l_Width < l_Height ? l_Width : l_Height);
-		UE_LOG(LogTemp, Warning, TEXT("Symbols number in line to win less than any side. This value set to %d"), SymbolsInLineForWin);
+		UE_LOG(LogTemp, Warning, TEXT("Symbols number in line to win greater than any side. This value set to %d"), SymbolsInLineForWin);
 	}
 	else
 	{
@@ -252,6 +252,6 @@ bool UAComp_BoardInfo::Initialization_Implementation(int32 l_Width, int32 l_Heig
 	if(Field.Num() > 0) Field.Empty();		// очищаем массив с клетками в случае, если он не пустой
 	Field.Init(PlayersSymbol::PSymb_None, l_Width*l_Height);	// инициализация массива с содержимым клеток
 	
-	return false;
+	return true;
 }
 
