@@ -9,7 +9,7 @@ public class TicTacToe_Rules : ModuleRules
 		PCHUsage = ModuleRules.PCHUsageMode.UseExplicitOrSharedPCHs;
 		
 		PublicIncludePaths.AddRange(
-			new string[] {
+			new string[] { 
 				// ... add public include paths required here ...
 			}
 			);
@@ -38,6 +38,7 @@ public class TicTacToe_Rules : ModuleRules
 				"Engine",
 				"Slate",
 				"SlateCore",
+				"InputCore",
 				// ... add private dependencies that you statically link with here ...	
 			}
 			);
