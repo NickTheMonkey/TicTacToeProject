@@ -3,6 +3,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
+
+#include "DATA/Enums/ENUMS.h"
 #include "GameFramework/Actor.h"
 #include "ABoard.generated.h"
 
@@ -31,6 +33,8 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	UAComp_BoardInfo* boardInfo;
 
+	void ClickOnTile(const int32& l_TileNumber, const PlayersSymbol& l_Symbol);
+
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
@@ -38,8 +42,9 @@ public:
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
 	void NewGame(int32 field_Width, int32 field_Height, const int32& l_SymbolsInLineToWin);
 
-	// дистанция между тайлами
-	UPROPERTY(EditAnywhere)
-	float DistanceBetweenTiles = 10.f;
-
+	// функции для ИИ
+	UFUNCTION(BlueprintCallable)
+	void GetBoardStatus(TArray<PlayersSymbol>& l_Field);
+	UFUNCTION(BlueprintCallable)
+	void SetTileStatus(const int32& l_TileNumber, const PlayersSymbol& l_NewSymbol);
 };
