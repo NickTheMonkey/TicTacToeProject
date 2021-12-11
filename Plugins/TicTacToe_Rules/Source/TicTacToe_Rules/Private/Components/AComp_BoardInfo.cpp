@@ -89,6 +89,15 @@ bool UAComp_BoardInfo::SetTileSymbol(const int32& l_Width, const int32& l_Height
 	return false;
 }
 
+bool UAComp_BoardInfo::SetTileSymbolForNumber(const int32& l_Number, const PlayersSymbol& l_Symbol)
+{
+	if(!Field.IsValidIndex(l_Number)) return false;
+
+	Field[l_Number] = l_Symbol;
+	CheckWinner();
+	return true;
+}
+
 void UAComp_BoardInfo::GetFieldStatus(TArray<PlayersSymbol>& l_Field)
 {
 	l_Field = Field;
