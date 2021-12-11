@@ -35,6 +35,8 @@ public:
 	UFUNCTION(BlueprintCallable, Category="Gameplay")
 	bool SetTileSymbol(const int32& l_Width, const int32& l_Height, const PlayersSymbol& l_Symbol);
 	UFUNCTION(BlueprintCallable, Category="Gameplay")
+	bool SetTileSymbolForNumber(const int32& l_Number, const PlayersSymbol& l_Symbol);
+	UFUNCTION(BlueprintCallable, Category="Gameplay")
 	void GetFieldStatus(TArray<PlayersSymbol>& l_Field);
 
 	// конвертирует номер в положение тайла на доске
