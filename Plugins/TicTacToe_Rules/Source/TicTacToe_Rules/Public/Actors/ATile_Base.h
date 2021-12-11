@@ -3,10 +3,12 @@
 #pragma once
 
 #include "CoreMinimal.h"
+
+#include "DATA/Enums/ENUMS.h"
 #include "GameFramework/Actor.h"
 #include "ATile_Base.generated.h"
 
-DECLARE_DELEGATE_OneParam(FOnTileClicked, int32);
+DECLARE_DELEGATE_TwoParams(FOnTileClicked, int32, PlayersSymbol);
 
 UCLASS()
 class TICTACTOE_RULES_API AATile_Base : public AActor
@@ -30,8 +32,8 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	USceneComponent* Root;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-	UStaticMeshComponent* SMesh;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (Tooltip = "Mesh for set size"))
+	UStaticMeshComponent* SizeMesh;
 	
 public:	
 	// Called every frame
@@ -39,9 +41,6 @@ public:
 
 	FOnTileClicked OnTileClicked;
 	
-	UFUNCTION(BlueprintNativeEvent)
-	void Event_Click();
-
 	UFUNCTION(BlueprintCallable)
 	void SetTileNumber(const int32 Number);
 
@@ -50,4 +49,8 @@ public:
 
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 	FVector GetBounds();
+
+	UFUNCTION(BlueprintNativeEvent, meta = (Tooltip = "Visual effect for change symbol"))
+	void SetSymbol(const PlayersSymbol& l_Sym);
+
 };
