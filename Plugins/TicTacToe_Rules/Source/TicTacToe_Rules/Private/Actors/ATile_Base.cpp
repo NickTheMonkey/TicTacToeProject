@@ -37,10 +37,10 @@ void AATile_Base::OnClick_Implementation(UPrimitiveComponent* ClickedActor, FKey
 			if(IIPlayerController::Execute_GetSymbol(l_Controller, l_Sym))
 			{
 				SetSymbol(l_Sym); // символ найденного игрока дается тайлу
-				OnTileClicked.ExecuteIfBound(TileNumber, l_Sym);
+				OnTileClicked.ExecuteIfBound(TileNumber, l_Sym); // бинд создается в ABoard при генерации тайлов
 			};
 
-			IIPlayerController::Execute_NextPlayerTurn(l_Controller);
+			//IIPlayerController::Execute_NextPlayerTurn(l_Controller);
 		};
 	};
 }
