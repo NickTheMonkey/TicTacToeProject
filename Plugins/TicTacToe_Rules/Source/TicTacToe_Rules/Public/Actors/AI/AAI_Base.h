@@ -34,7 +34,7 @@ protected:
 
 	// функция, в которой будет находиться алгоритм рассчета хода
 	//UFUNCTION()
-	virtual int32 CalculateTurn(const TArray<PlayersSymbol>& board);
+	virtual int32 CalculateTurn(int32& l_Width, int32& l_Height, const TArray<PlayersSymbol>& board);
 	
 public:	
 	// Called every frame

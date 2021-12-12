@@ -20,7 +20,7 @@ void AAAI_Base::BeginPlay()
 	
 }
 
-int32 AAAI_Base::CalculateTurn(const TArray<PlayersSymbol>& board)
+int32 AAAI_Base::CalculateTurn(int32& l_Width, int32& l_Height, const TArray<PlayersSymbol>& board)
 {
 	return -1;
 }
@@ -59,8 +59,9 @@ void AAAI_Base::Turn_Begin_Implementation()
 	if(BoardReference)
 	{
 		TArray<PlayersSymbol> board;
-		BoardReference->GetBoardStatus(board);
-		BoardReference->SetTileStatus(CalculateTurn(board), Symbol);
+		int32 l_Width, l_Height;
+		BoardReference->GetBoardStatus(l_Width, l_Height, board);
+		BoardReference->SetTileStatus(CalculateTurn(l_Width, l_Height, board), Symbol);
 	}
 }
 
