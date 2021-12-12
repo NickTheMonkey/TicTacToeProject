@@ -37,9 +37,9 @@ void AABoard::Tick(float DeltaTime)
 
 }
 
-void AABoard::GetBoardStatus(TArray<PlayersSymbol>& l_Field)
+void AABoard::GetBoardStatus(int32& l_Width, int32& l_Height, TArray<PlayersSymbol>& l_Field)
 {
-	boardInfo->GetFieldStatus(l_Field);
+	boardInfo->GetFieldStatus(l_Width, l_Height, l_Field);
 }
 
 void AABoard::SetTileStatus(const int32& l_TileNumber, const PlayersSymbol& l_NewSymbol)
@@ -74,7 +74,8 @@ void AABoard::NewGame_Implementation(int32 field_Width, int32 field_Height, cons
 	if(boardInfo->Initialization_Implementation(field_Width, field_Height, l_SymbolsInLineToWin))
 	{
 		TArray<PlayersSymbol> l_field;
-		boardInfo->GetFieldStatus(l_field);
+		int32 w,h; // используются только для вызова следующей функции
+		boardInfo->GetFieldStatus(w, h, l_field);
 		
 		const FVector l_Tile = TilesType.GetDefaultObject()->GetBounds(); // сохраняется размер тайла
 

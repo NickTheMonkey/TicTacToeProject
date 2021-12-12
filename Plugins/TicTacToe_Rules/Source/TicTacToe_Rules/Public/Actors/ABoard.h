@@ -48,7 +48,7 @@ public:
 
 	// функции для ИИ
 	UFUNCTION(BlueprintCallable)
-	void GetBoardStatus(TArray<PlayersSymbol>& l_Field);
+	void GetBoardStatus(int32& l_Width, int32& l_Height, TArray<PlayersSymbol>& l_Field);
 	UFUNCTION(BlueprintCallable)
 	void SetTileStatus(const int32& l_TileNumber, const PlayersSymbol& l_NewSymbol);
 };
