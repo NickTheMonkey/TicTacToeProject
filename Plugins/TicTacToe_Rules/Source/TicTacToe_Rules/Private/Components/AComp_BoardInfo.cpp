@@ -3,6 +3,9 @@
 
 #include "Components/AComp_BoardInfo.h"
 
+#include "DATA/Interfaces/IPlayerController.h"		// нужны для костыля 
+#include "Kismet/GameplayStatics.h"					// с рассылкой всем игрокам символа победителя
+
 // Sets default values for this component's properties
 UAComp_BoardInfo::UAComp_BoardInfo()
 {
@@ -26,29 +29,52 @@ void UAComp_BoardInfo::BeginPlay()
 void UAComp_BoardInfo::Counter(const int32& x, const int32& y, PlayersSymbol& currentSymbol, int32& counter)
 {
 	int32 l_position; // номер рассматриваемой позиции
-	Convert_Position_ToNumber(x,y, l_position);
-	PlayersSymbol l_buffer = Field[l_position]; // символ, который находится по рассматриваемым координатам
+	if(Convert_Position_ToNumber(x,y, l_position))
+	{
+		PlayersSymbol l_buffer = Field[l_position]; // символ, который находится по рассматриваемым координатам
 			
-	if((l_buffer == PlayersSymbol::PSymb_None) || (l_buffer == PlayersSymbol::PSymb_Count)) // Symb_Count не подлжен оказаться использованным на доске. Добавлен для перестраховки
+		
+		
+		if((l_buffer == PlayersSymbol::PSymb_None) || (l_buffer == PlayersSymbol::PSymb_Count)) // Symb_Count не подлжен оказаться использованным на доске. Добавлен для перестраховки
+			{
+			counter = 0;
+			return;
+			}
+		if(l_buffer == currentSymbol) // текущая клетка имеет тот же символ, что и предыдущая
+			{
+			counter++;
+			}
+		if(l_buffer != currentSymbol)
 		{
-		counter = 0;
-		return;
+			counter = 1; // 1 потому что в этой проверке не учавствует None, а значит символ является игроком, и счетчик теперь считывается отсюда
+			currentSymbol = l_buffer;
 		}
-	if(l_buffer == currentSymbol) // текущая клетка имеет тот же символ, что и предыдущая
-		{
-		counter++;
-		}
-	if(l_buffer != currentSymbol)
-	{
-		counter = 1; // 1 потому что в этой проверке не учавствует None, а значит символ является игроком, и счетчик теперь считывается отсюда
-		currentSymbol = l_buffer;
-	}
 
-	if(counter >= SymbolsInLineForWin)
-	{
-		WinnerFounded.Execute(currentSymbol);
-		return;
-	}
+		if(counter >= SymbolsInLineForWin)
+		{
+			// бинд к этому делегату, из конструктора ABoard, роняет проект, поэтому использовал рассылку всем игрокам
+			WinnerFounded.ExecuteIfBound(currentSymbol);
+
+			//костыль
+			TArray<AActor*> actors;
+			UGameplayStatics::GetAllActorsWithInterface(GWorld, UIPlayerController::StaticClass(), actors);
+			for(AActor* a: actors)
+			{
+				IIPlayerController::Execute_ShowWinner(a, currentSymbol);
+			}
+		}
+
+		// если на поле не осталось свободных тайлов - будет считаться "ничья"
+		if(!Field.Contains(PlayersSymbol::PSymb_None))
+		{
+			TArray<AActor*> actors;
+			UGameplayStatics::GetAllActorsWithInterface(GWorld, UIPlayerController::StaticClass(), actors);
+			for(AActor* a: actors)
+			{
+				IIPlayerController::Execute_ShowWinner(a, PlayersSymbol::PSymb_None);
+			}
+		}
+	};
 }
 
 
@@ -71,7 +97,7 @@ bool UAComp_BoardInfo::GetTileSymbol(const int32& l_Width, const int32& l_Height
 		return true;
 	}
 
-	UE_LOG(LogTemp, Warning, TEXT("Requested position is not valid"));
+	UE_LOG(LogTemp, Log, TEXT("Requested position is not valid"));
 	return false;
 }
 
@@ -85,7 +111,7 @@ bool UAComp_BoardInfo::SetTileSymbol(const int32& l_Width, const int32& l_Height
 		return true;
 	}
 
-	UE_LOG(LogTemp, Warning, TEXT("Field have not tile number %d"), position);
+	UE_LOG(LogTemp, Log, TEXT("Field have not tile number %d"), position);
 	return false;
 }
 
@@ -113,9 +139,9 @@ bool UAComp_BoardInfo::Convert_Number_ToPosition(const int32& l_Number, int32& l
 bool UAComp_BoardInfo::Convert_Position_ToNumber(const int32& l_Width, const int32& l_Height, int32& l_Number)
 {
 	l_Number = l_Height * Width + l_Width;
-	if(l_Number > Field.Num())
+	if(l_Number >= Field.Num())
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Required position grater than field size"));
+		//UE_LOG(LogTemp, Log, TEXT("Required position grater than field size"));
 		return false;
 	}
 	return true;
@@ -132,31 +158,8 @@ void UAComp_BoardInfo::CheckWinner_Implementation()
 		for(int32 x = 0; x < Width; x++)
 		{
 			Counter(x,y,l_sym,l_count);
-			/*int32 l_position; // номер рассматриваемой позиции
-			Convert_Position_ToNumber(x,y, l_position);
-			PlayersSymbol l_buffer = Field[l_position]; // символ, который находится по рассматриваемым координатам
-			
-			if((l_buffer == PlayersSymbol::PSymb_None) || (l_buffer == PlayersSymbol::PSymb_Count)) // Symb_Count не подлжен оказаться использованным на доске. Добавлен для перестраховки
-			{
-				l_count = 0;
-				continue;
-			}
-			if(l_buffer == l_sym) // текущая клетка имеет тот же символ, что и предыдущая
-			{
-				l_count++;
-			}
-			if(l_buffer != l_sym)
-			{
-				l_count = 1; // 1 потому что в этой проверке не учавствует None, а значит символ является игроком, и счетчик теперь считывается отсюда
-				l_sym = l_buffer;
-			}
-
-			if(l_count >= SymbolsInLineForWin)
-			{
-				FoundedWinner(l_sym);
-				return;
-			}*/
 		}
+		l_count = 0;
 	}
 
 	// перебор по вертикали
@@ -166,8 +169,8 @@ void UAComp_BoardInfo::CheckWinner_Implementation()
 		{
 			Counter(x,y,l_sym,l_count);
 		}
+		l_count = 0;
 	}
-
 	// перебор по спадающей диагонали (\), начиная с левого нижнего угла, поднимаясь до y == 0
 	for(int32 y = Height - 1; y >= 0; y--)
 	{
@@ -181,8 +184,8 @@ void UAComp_BoardInfo::CheckWinner_Implementation()
 				x++;
 				y_current++;
 			}
+		l_count = 0;
 	}
-
 	// перебор по спадающей диагонали (\), начиная с левого верхнего угла,двигаясь вправо до x == Width
 	for(int32 x = 0; x < Width; x++)
 	{
@@ -196,8 +199,8 @@ void UAComp_BoardInfo::CheckWinner_Implementation()
 			x_current++;
 			y++;
 		}
+		l_count = 0;
 	}
-
 	// перебор по поднимающейся диагонали (/), начиная с правого нижнего угла,двигаясь вверх до y == 0
 	for(int32 y = Height - 1; y >= 0; y--)
 	{
@@ -211,8 +214,8 @@ void UAComp_BoardInfo::CheckWinner_Implementation()
 			x--;
 			y_current++;
 		}
+		l_count = 0;
 	}
-
 	// перебор по поднимающейся диагонали (/), начиная с правого верхнего угла,двигаясь влево до х == 0
 	for(int32 x = Width - 1; x >= 0; x--)
 	{
@@ -235,12 +238,12 @@ bool UAComp_BoardInfo::Initialization_Implementation(int32 l_Width, int32 l_Heig
 	if(l_Width < 1)
 	{
 		l_Width = 1;
-		UE_LOG(LogTemp, Warning, TEXT("Width was initiate less than 1. Width set to %d"), l_Width);
+		UE_LOG(LogTemp, Log, TEXT("Width was initiate less than 1. Width set to %d"), l_Width);
 	}
 	if(l_Height < 1)
 	{
 		l_Height = 1;
-		UE_LOG(LogTemp, Warning, TEXT("Height was initiate less than 1. Height set to %d"), l_Height);
+		UE_LOG(LogTemp, Log, TEXT("Height was initiate less than 1. Height set to %d"), l_Height);
 	}
 	Width = l_Width;
 	Height = l_Height;
@@ -250,7 +253,7 @@ bool UAComp_BoardInfo::Initialization_Implementation(int32 l_Width, int32 l_Heig
 	if((l_SymbolsInLineToWin > l_Width) && (l_SymbolsInLineToWin > l_Height)) // если невозможно впихнуть заданную победную линию в созданное поле
 	{
 		SymbolsInLineForWin = (l_Width < l_Height ? l_Width : l_Height);
-		UE_LOG(LogTemp, Warning, TEXT("Symbols number in line to win greater than any side. This value set to %d"), SymbolsInLineForWin);
+		UE_LOG(LogTemp, Log, TEXT("Symbols number in line to win greater than any side. This value set to %d"), SymbolsInLineForWin);
 	}
 	else
 	{

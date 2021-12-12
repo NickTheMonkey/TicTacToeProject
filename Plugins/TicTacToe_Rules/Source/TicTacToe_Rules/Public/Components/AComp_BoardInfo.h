@@ -7,6 +7,7 @@
 #include "DATA/Enums/ENUMS.h"
 
 #include "AComp_BoardInfo.generated.h"
+
 DECLARE_DELEGATE_OneParam(FWinnerFounded, PlayersSymbol);
 
 UCLASS( ClassGroup=(Board), meta=(BlueprintSpawnableComponent) )
