@@ -8,6 +8,8 @@
 #include "GameFramework/Actor.h"
 #include "AAI_Base.generated.h"
 
+class AABoard;
+
 UCLASS()
 class TICTACTOE_RULES_API AAAI_Base : public AActor, public IIPlayerController
 {
@@ -27,11 +29,17 @@ protected:
 	AActor* NextPlayer;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	bool isTurning;
+	UPROPERTY()
+	AABoard* BoardReference;
+
+	// функция, в которой будет находиться алгоритм рассчета хода
+	//UFUNCTION()
+	virtual int32 CalculateTurn(const TArray<PlayersSymbol>& board);
 	
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
-
+	
 #pragma region PlayerControllerInterface
 	
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
@@ -62,6 +70,14 @@ public:
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
 	void NextPlayerTurn();
 	virtual void NextPlayerTurn_Implementation() override;
+
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
+	void SetBoardReference(AABoard* boardRef);
+	virtual void SetBoardReference_Implementation(AABoard* boardRef) override;
+
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
+	void ShowWinner(PlayersSymbol winnner);
+	virtual void ShowWinner_Implementation(PlayersSymbol winnner) override;
 
 #pragma endregion PlayerControllerInterface
 };
