@@ -73,7 +73,10 @@ FVector AATile_Base::GetBounds()
 	FVector meshBoundsMax = {0.f,0.f,0.f};;
 	if(SizeMesh)
 	{
+		FVector scale = SizeMesh->GetComponentScale();
 		SizeMesh->GetLocalBounds(meshBoundsMin, meshBoundsMax);
+		meshBoundsMin *= scale;
+		meshBoundsMax *= scale;
 		meshBoundsMax -= meshBoundsMin;		//получим реальный размер тайла (меша)
 	}
 	return meshBoundsMax;
