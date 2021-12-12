@@ -2,9 +2,10 @@
 
 
 #include "Actors/ABoard.h"
-
+#include "DATA/FunctionLibraries/BPFL_General.h"
 #include "Actors/ATile_Base.h"
 #include "Components/AComp_BoardInfo.h"
+#include "DATA/Interfaces/IPlayerController.h"
 
 // Sets default values
 AABoard::AABoard()
@@ -13,17 +14,20 @@ AABoard::AABoard()
 	PrimaryActorTick.bCanEverTick = false;
 
 	boardInfo = CreateDefaultSubobject<UAComp_BoardInfo>(TEXT("Board info"));
+	// TODO: этот бинд роняет проект (хз, почему)
+	//boardInfo->WinnerFounded.BindUFunction(this, "WinnerIsFounded");
 }
 
 // Called when the game starts or when spawned
 void AABoard::BeginPlay()
 {
 	Super::BeginPlay();
+
 }
 
-void AABoard::ClickOnTile(const int32& l_TileNumber, const PlayersSymbol& l_Symbol)
+void AABoard::WinnerIsFounded(PlayersSymbol winner)
 {
-	
+	IsWinnerFounded.ExecuteIfBound(winner);
 }
 
 // Called every frame
@@ -43,6 +47,15 @@ void AABoard::SetTileStatus(const int32& l_TileNumber, const PlayersSymbol& l_Ne
 	if(boardInfo->SetTileSymbolForNumber(l_TileNumber, l_NewSymbol))
 	{
 		Tiles[l_TileNumber]->SetSymbol(l_NewSymbol);
+
+		AActor* turningActor = UBPFL_General::FindTurningController();
+		if(turningActor)
+		{
+			if(turningActor->GetClass()->ImplementsInterface(UIPlayerController::StaticClass()))
+			{
+				IIPlayerController::Execute_NextPlayerTurn(turningActor);
+			}
+		}
 	};
 }
 
@@ -85,7 +98,7 @@ void AABoard::NewGame_Implementation(int32 field_Width, int32 field_Height, cons
 					if(boardInfo->Convert_Position_ToNumber(x,y,l_Number)) createdTile->SetTileNumber(l_Number);
 					Tiles.Add(createdTile);
 
-					//createdTile->OnTileClicked.BindUFunction(this, "ClickOnTile");
+					createdTile->OnTileClicked.BindUFunction(this, "SetTileStatus");
 				}
 			}
 		}

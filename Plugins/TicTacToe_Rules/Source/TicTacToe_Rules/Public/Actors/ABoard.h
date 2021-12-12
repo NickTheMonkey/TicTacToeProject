@@ -11,6 +11,8 @@
 class UAComp_BoardInfo;
 class AATile_Base;
 
+DECLARE_DELEGATE_OneParam(FIsWinnerFounded, PlayersSymbol);
+
 UCLASS()
 class TICTACTOE_RULES_API AABoard : public AActor
 {
@@ -33,11 +35,13 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	UAComp_BoardInfo* boardInfo;
 
-	void ClickOnTile(const int32& l_TileNumber, const PlayersSymbol& l_Symbol);
+	void WinnerIsFounded(PlayersSymbol winner);
 
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
+
+	FIsWinnerFounded IsWinnerFounded;
 
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
 	void NewGame(int32 field_Width, int32 field_Height, const int32& l_SymbolsInLineToWin);
