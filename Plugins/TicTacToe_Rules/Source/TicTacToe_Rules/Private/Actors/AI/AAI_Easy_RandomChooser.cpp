@@ -3,7 +3,7 @@
 
 #include "Actors/AI/AAI_Easy_RandomChooser.h"
 
-int32 AAAI_Easy_RandomChooser::CalculateTurn(const TArray<PlayersSymbol>& board)
+int32 AAAI_Easy_RandomChooser::CalculateTurn(int32& l_Width, int32& l_Height, const TArray<PlayersSymbol>& board)
 {
 	if(board.Num() > 0)
 	{
