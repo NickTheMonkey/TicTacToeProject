@@ -124,8 +124,10 @@ bool UAComp_BoardInfo::SetTileSymbolForNumber(const int32& l_Number, const Playe
 	return true;
 }
 
-void UAComp_BoardInfo::GetFieldStatus(TArray<PlayersSymbol>& l_Field)
+void UAComp_BoardInfo::GetFieldStatus(int32& l_Width, int32& l_Height, TArray<PlayersSymbol>& l_Field)
 {
+	l_Width = Width;
+	l_Height = Height;
 	l_Field = Field;
 }
 
