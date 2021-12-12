@@ -6,6 +6,8 @@
 #include "DATA/Enums/ENUMS.h"
 #include "IPlayerController.generated.h"
 
+class AABoard;
+
 UINTERFACE(MinimalAPI, Blueprintable)
 class UIPlayerController : public UInterface
 {
@@ -40,4 +42,10 @@ public:
 	
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
 	void NextPlayerTurn();
+
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
+	void SetBoardReference(AABoard* boardRef);
+
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
+	void ShowWinner(PlayersSymbol winnner);
 };
