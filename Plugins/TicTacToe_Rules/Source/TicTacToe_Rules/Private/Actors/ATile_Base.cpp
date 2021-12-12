@@ -28,26 +28,29 @@ void AATile_Base::BeginPlay()
 
 void AATile_Base::OnClick_Implementation(UPrimitiveComponent* ClickedActor, FKey ButtonPressed)
 {
-	AActor* l_Controller = UBPFL_General::FindTurningController(); // поиск ходящего игрока, чтоб получить его символ
-	if(l_Controller)
+	if(Symbol == PlayersSymbol::PSymb_None)
 	{
-		if(l_Controller->GetClass()->ImplementsInterface(UIPlayerController::StaticClass()))
+		AActor* l_Controller = UBPFL_General::FindTurningController(); // поиск ходящего игрока, чтоб получить его символ
+		if(l_Controller)
 		{
-			PlayersSymbol l_Sym;
-			if(IIPlayerController::Execute_GetSymbol(l_Controller, l_Sym))
+			if(l_Controller->GetClass()->ImplementsInterface(UIPlayerController::StaticClass()))
 			{
-				SetSymbol(l_Sym); // символ найденного игрока дается тайлу
-				OnTileClicked.ExecuteIfBound(TileNumber, l_Sym); // бинд создается в ABoard при генерации тайлов
-			};
+				PlayersSymbol l_Sym;
+				if(IIPlayerController::Execute_GetSymbol(l_Controller, l_Sym))
+				{
+					SetSymbol(l_Sym); // символ найденного игрока дается тайлу
+					OnTileClicked.ExecuteIfBound(TileNumber, l_Sym); // бинд создается в ABoard при генерации тайлов
+				};
 
-			//IIPlayerController::Execute_NextPlayerTurn(l_Controller);
+				//IIPlayerController::Execute_NextPlayerTurn(l_Controller);
+			};
 		};
 	};
 }
 
 void AATile_Base::SetSymbol_Implementation(const PlayersSymbol& l_Sym)
 {
-	
+	Symbol = l_Sym;
 }
 
 // Called every frame

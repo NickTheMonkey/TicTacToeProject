@@ -34,6 +34,8 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (Tooltip = "Mesh for set size"))
 	UStaticMeshComponent* SizeMesh;
+
+	PlayersSymbol Symbol = PlayersSymbol::PSymb_None;
 	
 public:	
 	// Called every frame
@@ -50,6 +52,7 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 	FVector GetBounds();
 
+	// функция нужна для создания поведения, когда тип тайла меняется (например, для визуальных эффектов), однако обязательно необходимо ссылаться так же и на эту реализацию (использовать Super::SetSymbol)
 	UFUNCTION(BlueprintNativeEvent, meta = (Tooltip = "Visual effect for change symbol"))
 	void SetSymbol(const PlayersSymbol& l_Sym);
 
