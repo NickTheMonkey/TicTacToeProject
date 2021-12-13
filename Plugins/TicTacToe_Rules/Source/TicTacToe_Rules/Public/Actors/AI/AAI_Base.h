@@ -33,8 +33,10 @@ protected:
 	AABoard* BoardReference;
 
 	// функция, в которой будет находиться алгоритм рассчета хода
-	//UFUNCTION()
-	virtual int32 CalculateTurn(int32& l_Width, int32& l_Height, const TArray<PlayersSymbol>& board);
+	virtual int32 CalculateTurn(const int32& l_Width, const int32& l_Height, const TArray<PlayersSymbol>& board);
+
+	// линия, которую нужно собрать, для победы
+	int32 WinLine;
 	
 public:	
 	// Called every frame

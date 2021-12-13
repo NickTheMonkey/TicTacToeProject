@@ -9,8 +9,9 @@
 AAAI_Base::AAAI_Base()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = true;
-
+	PrimaryActorTick.bCanEverTick = false;
+	
+	WinLine = BoardReference->GetWinLine();
 }
 
 // Called when the game starts or when spawned
@@ -20,7 +21,7 @@ void AAAI_Base::BeginPlay()
 	
 }
 
-int32 AAAI_Base::CalculateTurn(int32& l_Width, int32& l_Height, const TArray<PlayersSymbol>& board)
+int32 AAAI_Base::CalculateTurn(const int32& l_Width, const int32& l_Height, const TArray<PlayersSymbol>& board)
 {
 	return -1;
 }
