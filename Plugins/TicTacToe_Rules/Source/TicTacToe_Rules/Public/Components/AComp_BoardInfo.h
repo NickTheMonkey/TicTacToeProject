@@ -42,6 +42,10 @@ public:
 
 	// конвертирует номер в положение тайла на доске
 	UFUNCTION(BlueprintCallable)
+	int32 GetLineToWin();
+	
+	// конвертирует номер в положение тайла на доске
+	UFUNCTION(BlueprintCallable)
 	bool Convert_Number_ToPosition(const int32& l_Number, int32& l_Width, int32& l_Height);
 	// конвертирует положение тайла на доске в номер
 	UFUNCTION(BlueprintCallable)

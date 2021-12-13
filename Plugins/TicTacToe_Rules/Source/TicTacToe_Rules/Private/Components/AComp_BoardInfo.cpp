@@ -131,6 +131,11 @@ void UAComp_BoardInfo::GetFieldStatus(int32& l_Width, int32& l_Height, TArray<Pl
 	l_Field = Field;
 }
 
+int32 UAComp_BoardInfo::GetLineToWin()
+{
+	return SymbolsInLineForWin;
+}
+
 bool UAComp_BoardInfo::Convert_Number_ToPosition(const int32& l_Number, int32& l_Width, int32& l_Height)
 {	
 	l_Width = l_Number%Width;		// кратность ширины - нулевой элемент следующей строки

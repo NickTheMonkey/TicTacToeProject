@@ -41,6 +41,9 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	UFUNCTION(BlueprintCallable)
+	int32 GetWinLine();
+	
 	FIsWinnerFounded IsWinnerFounded;
 
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)

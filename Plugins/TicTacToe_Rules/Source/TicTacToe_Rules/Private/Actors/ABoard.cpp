@@ -37,6 +37,11 @@ void AABoard::Tick(float DeltaTime)
 
 }
 
+int32 AABoard::GetWinLine()
+{
+	return boardInfo->GetLineToWin();
+}
+
 void AABoard::GetBoardStatus(int32& l_Width, int32& l_Height, TArray<PlayersSymbol>& l_Field)
 {
 	boardInfo->GetFieldStatus(l_Width, l_Height, l_Field);
