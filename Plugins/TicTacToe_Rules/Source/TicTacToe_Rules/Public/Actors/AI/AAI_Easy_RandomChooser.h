@@ -16,6 +16,5 @@ class TICTACTOE_RULES_API AAAI_Easy_RandomChooser : public AAAI_Base
 
 protected:
 	// функция, в которой будет находиться алгоритм рассчета хода
-	//UFUNCTION()
-	virtual int32 CalculateTurn(int32& l_Width, int32& l_Height, const TArray<PlayersSymbol>& board) override;
+	virtual int32 CalculateTurn(const int32& l_Width, const int32& l_Height, const TArray<PlayersSymbol>& board) override;
 };
