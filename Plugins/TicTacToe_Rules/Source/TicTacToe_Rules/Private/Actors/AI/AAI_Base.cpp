@@ -10,8 +10,6 @@ AAAI_Base::AAAI_Base()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = false;
-	
-	WinLine = BoardReference->GetWinLine();
 }
 
 // Called when the game starts or when spawned
@@ -91,6 +89,7 @@ void AAAI_Base::NextPlayerTurn_Implementation()
 void AAAI_Base::SetBoardReference_Implementation(AABoard* boardRef)
 {
 	BoardReference = boardRef;
+	WinLine = BoardReference->GetWinLine();
 }
 
 void AAAI_Base::ShowWinner_Implementation(PlayersSymbol winnner)
