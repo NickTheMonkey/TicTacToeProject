@@ -146,7 +146,7 @@ bool UAComp_BoardInfo::Convert_Number_ToPosition(const int32& l_Number, int32& l
 bool UAComp_BoardInfo::Convert_Position_ToNumber(const int32& l_Width, const int32& l_Height, int32& l_Number)
 {
 	l_Number = l_Height * Width + l_Width;
-	if(l_Number >= Field.Num())
+	if(l_Number >= Field.Num() || l_Number < 0)
 	{
 		//UE_LOG(LogTemp, Log, TEXT("Required position grater than field size"));
 		return false;
@@ -189,7 +189,7 @@ void UAComp_BoardInfo::CheckWinner_Implementation()
 			{
 				Counter(x,y_current,l_sym,l_count);
 				x++;
-				y_current++;
+				y_current--;
 			}
 		l_count = 0;
 	}
@@ -212,14 +212,14 @@ void UAComp_BoardInfo::CheckWinner_Implementation()
 	for(int32 y = Height - 1; y >= 0; y--)
 	{
 		int32 y_current = y; // y, используемый для перебора для каждого x
-		int32 x = Width; // текущий x
+		int32 x = Width - 1; // текущий x
 		int32 l_position; // номер рассматриваемой позиции
 		l_count = 0;
 		while(Convert_Position_ToNumber(x,y_current, l_position))
 		{
 			Counter(x,y_current,l_sym,l_count);
 			x--;
-			y_current++;
+			y_current--;
 		}
 		l_count = 0;
 	}
